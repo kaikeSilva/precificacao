@@ -23,9 +23,11 @@ class CompanyUsersTable
                     ->sortable(),
                 TextColumn::make('role')
                     ->label('Função')
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('email')
                     ->label('E-mail')
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
