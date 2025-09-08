@@ -12,16 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name', 120);
+            $table->id();
+            $table->string('name', 120)->nullable();
             $table->string('document', 32)->nullable();
-            $table->foreignId('owner_user_id')->constrained('users');
+            $table->foreignId('owner_user_id')->nullable()->constrained('users');
             $table->string('timezone', 64)->default('America/Sao_Paulo');
             $table->timestamps();
-            $table->softDeletes();
-
-            $table->index('name');
-            $table->index('document');
         });
     }
 
