@@ -45,4 +45,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'company_user')
+            ->using(CompanyUser::class)
+            ->withPivot('role')
+            ->withTimestamps();
+    }
 }

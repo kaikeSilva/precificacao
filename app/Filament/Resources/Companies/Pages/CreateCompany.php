@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\Companies\Pages;
 
 use App\Filament\Resources\Companies\CompanyResource;
+use App\Models\Company;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class CreateCompany extends CreateRecord
 {
@@ -18,5 +20,10 @@ class CreateCompany extends CreateRecord
     protected function getCreatedNotificationTitle(): ?string
     {
         return 'Empresa criada';
+    }
+
+    protected function handleRecordCreation(array $data): Model
+    {
+        return Company::createCompany($data);
     }
 }

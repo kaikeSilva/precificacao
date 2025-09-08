@@ -19,9 +19,6 @@ class CompanyForm
                 TextInput::make('document')
                     ->label('Documento')
                     ->required(),
-                // TextInput::make('owner_user.name')
-                //     ->label('Dono')
-                //     ->required(),
                 Select::make('owner_user_id')
                     ->label('Dono')
                     ->options(ModelsUser::query()->pluck('name', 'id'))

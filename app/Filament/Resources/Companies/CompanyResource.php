@@ -10,6 +10,7 @@ use App\Filament\Resources\Companies\Schemas\CompanyForm;
 use App\Filament\Resources\Companies\Schemas\CompanyInfolist;
 use App\Filament\Resources\Companies\Tables\CompaniesTable;
 use App\Models\Company;
+use App\Filament\Resources\Companies\RelationManagers\CompanyUsersRelationManager;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -40,7 +41,7 @@ class CompanyResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CompanyUsersRelationManager::class,
         ];
     }
 
