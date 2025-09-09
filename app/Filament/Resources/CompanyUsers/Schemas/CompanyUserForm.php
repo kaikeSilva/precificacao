@@ -42,8 +42,11 @@ class CompanyUserForm
                 ->hidden(fn ($livewire) : bool => !self::isOnCompanyUserContext($livewire))
                 ->disabled(fn ($record) : bool => $record ? $record->ownedCompany()->exists() : false)
                 ->options(CompanyUser::ROLE_LABELS),
-            Group::make()
-                ->relationship('user')
+            Fieldset::make()
+                ->relationship('user',condition: function(?array $state, $livewire) : bool {
+                    // dd($state, $livewire->data);
+                    return filled($state['name']);
+                })
                 ->columnSpan('full')
                 ->schema([
                     TextInput::make('name')

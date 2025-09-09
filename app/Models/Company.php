@@ -37,14 +37,6 @@ class Company extends Model
         return $this->hasOne(CompanySettings::class);
     }
 
-    public function owner()
-    {
-        return $this->hasOne(CompanyUser::class)
-            ->ofMany([], function($query) {
-                $query->where('role', CompanyUser::ROLE_OWNER);
-            });
-    }
-
     public static function selectUsers($companyId)
     {
         return CompanyUser::query()
