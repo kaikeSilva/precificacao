@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Companies\Pages;
 
 use App\Filament\Resources\Companies\CompanyResource;
+use App\Services\CompanyService;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateCompany extends CreateRecord
@@ -22,9 +23,9 @@ class CreateCompany extends CreateRecord
 
     // protected function handleRecordCreation(array $data): Model
     // {
-    //     $company = Company::find(1);
-    //     dd($company->owner->user);
-    //     return app(CompanyService::class)->createCompany($data);
+    //     $company = app(CompanyService::class)->createCompany($data);
+    //     $this->ownerPayload = $company->owner->user;
+    //     return $company;
     // }
 
     protected array $ownerPayload = [];

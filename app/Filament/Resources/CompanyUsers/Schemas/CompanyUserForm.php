@@ -47,6 +47,10 @@ class CompanyUserForm
                     // dd($state, $livewire->data);
                     return filled($state['name']);
                 })
+                ->mutateRelationshipDataBeforeCreateUsing(function ($data, $livewire) : void {
+                    dd($data, $livewire->data);
+                    $data['user'] = $livewire->data['user'];
+                })
                 ->columnSpan('full')
                 ->schema([
                     TextInput::make('name')

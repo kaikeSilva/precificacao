@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * CompanyUser
@@ -13,8 +13,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class CompanyUser extends Model
+class CompanyUser extends Pivot
 {
+    public $incrementing = true;
     protected $table = 'company_users';
     protected $fillable = [
         'company_id',
@@ -47,11 +48,6 @@ class CompanyUser extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
-    }
-
-    public function ownedCompany()
-    {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 
     public function user()

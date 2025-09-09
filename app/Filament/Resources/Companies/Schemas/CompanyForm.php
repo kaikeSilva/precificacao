@@ -19,8 +19,15 @@ class CompanyForm
                 TextInput::make('document')
                     ->label('CPF/CNPJ')
                     ->required(),
-                Repeater::make('Responsável')
+                Repeater::make('companyUsers')
                     ->relationship('companyUsers')
+                    ->saveRelationshipsBeforeChildrenUsing(function ($data, $livewire, $component) : void {
+                        dump('saveRelationshipsBeforeChildrenUsing', $data);
+                    })
+                    ->mutateRelationshipDataBeforeCreateUsing(function ($data, $livewire, $component) : void {
+                        dump('mutateRelationshipDataBeforeCreateUsing', $data);
+                        $data['user'] = $livewire->data['user'];
+                    })
                     ->defaultItems(1)
                     ->addable(false)
                     ->deletable(false)
