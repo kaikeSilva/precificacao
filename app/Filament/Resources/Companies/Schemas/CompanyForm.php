@@ -3,13 +3,8 @@
 namespace App\Filament\Resources\Companies\Schemas;
 
 use App\Filament\Resources\CompanyUsers\Schemas\CompanyUserForm;
-use App\Models\Company;
-use App\Models\User;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Fieldset;
-use Filament\Schemas\Components\Livewire;
 use Filament\Schemas\Schema;
 
 class CompanyForm
@@ -31,7 +26,7 @@ class CompanyForm
                     ->deletable(false)
                     ->minItems(1)
                     ->maxItems(1)
-                    ->schema(CompanyUserForm::getFormFields())
+                    ->schema(CompanyUserForm::configure($schema)->getComponents())
                     ->hidden(fn($operation) : bool => $operation !== 'create')
                     ->columnSpan('full')
             ]);

@@ -3,13 +3,7 @@
 namespace App\Filament\Resources\Companies\Pages;
 
 use App\Filament\Resources\Companies\CompanyResource;
-use App\Models\Company;
-use App\Models\CompanyUser;
-use App\Models\User;
-use App\Services\CompanyService;
 use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 
 class CreateCompany extends CreateRecord
 {
