@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Companies\RelationManagers;
 
 use App\Filament\Resources\CompanyUsers\CompanyUserResource;
-use App\Services\CompanyUserService;
 use Filament\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
@@ -28,12 +27,6 @@ class CompanyUsersRelationManager extends RelationManager
                 CreateAction::make()
                 ->modal()
                 ->createAnother(false)
-                ->using(function (array $data, string $model): Model {
-                    // Cria o usuário e vincula ao Company atual via serviço
-                    $company = $this->getOwnerRecord();
-                    $companyUser = app(CompanyUserService::class)->createFromForm($company, $data);
-                    return $companyUser; // retornar o registro relacionado (User) para a tabela
-                })
             ]);
     }
 

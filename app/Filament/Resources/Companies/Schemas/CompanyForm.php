@@ -2,9 +2,13 @@
 
 namespace App\Filament\Resources\Companies\Schemas;
 
-use App\Models\User as ModelsUser;
+use App\Filament\Resources\CompanyUsers\Schemas\CompanyUserForm;
+use App\Models\Company;
+use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Livewire;
 use Filament\Schemas\Schema;
 
 class CompanyForm
@@ -14,25 +18,16 @@ class CompanyForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Nome')
+                    ->label('Nome da empresa')
                     ->required(),
                 TextInput::make('document')
-                    ->label('Documento')
+                    ->label('CPF/CNPJ')
                     ->required(),
-                Select::make('owner_user_id')
-                    ->label('Dono')
-                    ->options(ModelsUser::query()->pluck('name', 'id'))
-                    ->searchable()
-                    ->required(),
-                TextInput::make('timezone')
-                    ->label('Fuso Horário')
-                    ->required(),
-                TextInput::make('created_at')
-                    ->label('Criado em')
-                    ->hidden(),
-                TextInput::make('updated_at')
-                    ->label('Atualizado em')
-                    ->hidden()
+                Fieldset::make('Responsável')
+                    ->relationship('owner')
+                    ->schema(CompanyUserForm::getFormFields())
+                    ->hidden(fn($operation) : bool => $operation !== 'create')
+                    ->columnSpan('full')
             ]);
     }
 }

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name', 120)->nullable();
             $table->string('document', 32)->nullable();
-            $table->foreignId('owner_user_id')->nullable()->constrained('users');
             $table->string('timezone', 64)->default('America/Sao_Paulo');
             $table->timestamps();
         });

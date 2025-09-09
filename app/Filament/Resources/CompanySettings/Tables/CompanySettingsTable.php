@@ -1,35 +1,40 @@
 <?php
 
-namespace App\Filament\Resources\CompanyUsers\Tables;
+namespace App\Filament\Resources\CompanySettings\Tables;
 
-use App\Filament\Resources\CompanyUsers\Schemas\CompanyUserForm;
-use App\Filament\Resources\CompanyUsers\Schemas\CompanyUserEditForm;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class CompanyUsersTable
+class CompanySettingsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn ($query) => $query->with('user'))
             ->columns([
-                TextColumn::make('user.name')
-                    ->label('Usuário')
-                    ->searchable()
+                TextColumn::make('company.name')
+                    ->searchable(),
+                TextColumn::make('work_hours_per_month')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('role')
-                    ->label('Função')
-                    ->sortable()
+                TextColumn::make('rounding_mode')
                     ->searchable(),
-                TextColumn::make('user.email')
-                    ->label('E-mail')
-                    ->sortable()
+                TextColumn::make('rounding_step')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('currency')
                     ->searchable(),
+                IconColumn::make('active_time_only')
+                    ->boolean(),
+                TextColumn::make('pricing_min_margin_pct')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('pricing_max_margin_pct')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -43,9 +48,7 @@ class CompanyUsersTable
                 //
             ])
             ->recordActions([
-                // edit on modal
-                EditAction::make()
-                    ->modal()
+                EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

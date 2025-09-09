@@ -19,10 +19,8 @@ class CompanyUserResource extends Resource
     protected static ?string $model = CompanyUser::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static ?string $pluralModelLabel = 'Usuários';
-    protected static ?string $modelLabel = 'Usuário';
-
-    // shouldRegisterNavigation
+    protected static ?string $pluralModelLabel = CompanyUser::PLURAL_MODEL_LABEL;
+    protected static ?string $modelLabel = CompanyUser::SINGULAR_MODEL_LABEL;
     public static bool $shouldRegisterNavigation = false;
     
     public static function form(Schema $schema): Schema

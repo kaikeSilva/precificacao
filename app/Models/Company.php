@@ -2,34 +2,55 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Company
+ * 
+ * @property int $id
+ * @property string $name
+ * @property string $document
+ * @property string $timezone
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Collection|CompanyUser[] $companyUsers
+ * @property CompanySettings $settings
+ * @property CompanyUser $owner
+ * @property Collection|CompanyUser[] $selectUsers
+ */
 class Company extends Model
 {
     protected $fillable = [
         'name',
         'document',
-        'owner_user_id',
         'timezone',
     ];
 
     public function companyUsers()
     {
-        return $this->belongsToMany(User::class, 'company_user')
-            ->using(CompanyUser::class)
-            ->withPivot('role')
-            ->withTimestamps();
+        return $this->hasMany(CompanyUser::class);
     }
 
-    public function owner_user()
+    public function settings()
     {
-        return $this->belongsTo(User::class, 'owner_user_id');
+        return $this->hasOne(CompanySettings::class);
     }
 
-    public static function createCompany($data)
+    public function owner()
     {
-        $company = static::create($data);
-        $company->companyUsers()->attach($data['owner_user_id'], ['role' => CompanyUser::ROLE_OWNER]);
-        return $company;
+        return $this->hasOne(CompanyUser::class)
+            ->ofMany([], function($query) {
+                $query->where('role', CompanyUser::ROLE_OWNER);
+            });
+    }
+
+    public static function selectUsers($companyId)
+    {
+        return CompanyUser::query()
+            ->with('user')
+            ->select('company_user_id', 'user_id', 'user.name as user_name')
+            ->where('company_id', $companyId)
+            ->first();
     }
 }

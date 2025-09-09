@@ -12,16 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('company_user', function (Blueprint $table) {
-            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+        Schema::create('company_users', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('company_id')->nullable()->constrained('companies')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
 
             $table->enum('role', CompanyUser::ROLES)->default(CompanyUser::ROLE_OWNER);
 
             $table->timestamps();
-
-            $table->primary(['company_id', 'user_id']);
-            $table->index('role');
         });
     }
 

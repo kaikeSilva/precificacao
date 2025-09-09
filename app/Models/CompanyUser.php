@@ -2,17 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Model;
 
-class CompanyUser extends Pivot
+/**
+ * CompanyUser
+ * 
+ * @property int $company_id
+ * @property int $user_id
+ * @property string $role
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
+class CompanyUser extends Model
 {
-    protected $table = 'company_user';
-
+    protected $table = 'company_users';
     protected $fillable = [
         'company_id',
         'user_id',
         'role',
     ];
+
+    public const PLURAL_MODEL_LABEL = 'Usuários';
+    public const SINGULAR_MODEL_LABEL = 'Usuário';
 
     public const ROLE_OWNER = 'owner';
     public const ROLE_MANAGER = 'manager';
@@ -27,7 +38,7 @@ class CompanyUser extends Pivot
     ];
 
     public const ROLE_LABELS = [
-        self::ROLE_OWNER => 'Dono',
+        self::ROLE_OWNER => 'Responsável',
         self::ROLE_MANAGER => 'Gerente',
         self::ROLE_OPERATOR => 'Operador',
         self::ROLE_VIEWER => 'Visualizador',
@@ -36,6 +47,11 @@ class CompanyUser extends Pivot
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function ownedCompany()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 
     public function user()

@@ -21,7 +21,7 @@ class CompaniesTable
                 TextColumn::make('document')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('owner_user.name')
+                TextColumn::make('owner.user.name')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('timezone')
