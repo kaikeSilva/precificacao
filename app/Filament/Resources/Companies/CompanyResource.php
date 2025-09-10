@@ -11,6 +11,7 @@ use App\Filament\Resources\Companies\Schemas\CompanyInfolist;
 use App\Filament\Resources\Companies\Tables\CompaniesTable;
 use App\Models\Company;
 use App\Filament\Resources\Companies\RelationManagers\CompanyUsersRelationManager;
+use App\Filament\Resources\Companies\RelationManagers\SettingsRelationManager;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;

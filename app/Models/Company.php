@@ -35,6 +35,7 @@ class Company extends Model
     public function settings()
     {
         return $this->hasOne(CompanySettings::class);
+
     }
 
     public function owners()
