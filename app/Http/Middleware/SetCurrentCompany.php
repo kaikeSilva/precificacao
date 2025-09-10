@@ -12,33 +12,49 @@ class SetCurrentCompany
     public function handle(Request $request, Closure $next)
     {
         $user = $request->user();
-        // Sem login → segue
-        if (!$user) {
+
+        // Sem login → segue normalmente
+        if (! $user) {
             return $next($request);
         }
-        
+
+        $currentRoute = $request->route()?->getName();
+
+        /**
+         * Rotas que devem ser permitidas mesmo sem empresa:
+         * - logout
+         * - tela de criação de empresa
+         */
+        $allowedRoutes = [
+            'filament.admin.auth.logout',
+            'filament.admin.resources.companies.create',
+        ];
+
+        if (in_array($currentRoute, $allowedRoutes, true)) {
+            return $next($request);
+        }
+
         /** @var CurrentCompany $ctx */
-        $ctx = app(CurrentCompany::class);
-        
+        $ctx = app(\App\Support\CurrentCompany::class);
+
         // 1) Sessão tem company_id?
         if ($id = session('company_id')) {
             $company = Company::query()
-            ->whereKey($id)
-            ->whereHas('companyUsers', fn($q) => $q->where('user_id', $user->id))
-            ->first();
+                ->whereKey($id)
+                ->whereHas('companyUsers', fn ($q) => $q->where('user_id', $user->id))
+                ->first();
+
             if ($company) {
                 $ctx->set($company);
-                // dd("Sessão tem company_id", $id, $company);
                 return $next($request);
             } else {
-                // limpa sessão inválida
                 session()->forget('company_id');
             }
         }
 
-        // 2) Descobrir por pivot
+        // 2) Buscar empresas do usuário
         $companies = Company::query()
-            ->whereHas('companyUsers', fn($q) => $q->where('user_id', $user->id))
+            ->whereHas('companyUsers', fn ($q) => $q->where('user_id', $user->id))
             ->get();
 
         if ($companies->count() === 1) {
@@ -48,16 +64,13 @@ class SetCurrentCompany
         }
 
         if ($companies->count() > 1) {
-            // Escolha sua estratégia:
-            // a) Redirecionar pra página de seleção
-            // return redirect()->route('companies.choose');
-
-            // b) Fallback: primeira
             $ctx->set($companies->first());
             session(['company_id' => $companies->first()->id]);
             return $next($request);
         }
 
-        abort(403, 'Você não está vinculado a nenhuma empresa.');
+        // 3) Nenhuma empresa → redirecionar para criar empresa
+        return redirect()->route('filament.admin.resources.companies.create');
     }
+
 }
