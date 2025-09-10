@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Companies\Pages;
 use App\Filament\Resources\Companies\CompanyResource;
 use App\Services\CompanyService;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class CreateCompany extends CreateRecord
 {
@@ -21,23 +22,8 @@ class CreateCompany extends CreateRecord
         return 'Empresa criada';
     }
 
-    // protected function handleRecordCreation(array $data): Model
-    // {
-    //     $company = app(CompanyService::class)->createCompany($data);
-    //     $this->ownerPayload = $company->owner->user;
-    //     return $company;
-    // }
-
-    protected array $ownerPayload = [];
-
-    // protected function mutateFormDataBeforeCreate(array $data): array
-    // {
-    //     // dump("mutating form data before create", $data);
-    //     return $data;
-    // }
-
-    // protected function afterCreate(): void
-    // {
-    //     // dump("after create ownerPayload", $this->ownerPayload);
-    // }
+    protected function handleRecordCreation(array $data): Model
+    {
+        return app(CompanyService::class)->createCompany($data);
+    }
 }

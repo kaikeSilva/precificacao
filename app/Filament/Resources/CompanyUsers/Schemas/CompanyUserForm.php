@@ -7,7 +7,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Fieldset;
-use Filament\Schemas\Components\Group;
 use Filament\Schemas\Schema;
 
 /**
@@ -22,6 +21,8 @@ class CompanyUserForm
         'company-users-relation-manager',
     ];
 
+    private static $isEditing = false;
+
     private static function isOnCompanyUserContext($livewire): bool
     {
         $livewireName = explode('.', $livewire->getName());
@@ -31,7 +32,15 @@ class CompanyUserForm
         }
         return false;
     }
-    
+
+    private static function getFieldSet(): Fieldset
+    {
+        return self::$isEditing ? 
+        Fieldset::make()
+            ->relationship("user") : 
+        Fieldset::make();
+    }
+
     public static function getFormFields(): array
     {
         return [
@@ -40,17 +49,8 @@ class CompanyUserForm
                 ->required()
                 ->default('owner')
                 ->hidden(fn ($livewire) : bool => !self::isOnCompanyUserContext($livewire))
-                ->disabled(fn ($record) : bool => $record ? $record->ownedCompany()->exists() : false)
                 ->options(CompanyUser::ROLE_LABELS),
-            Fieldset::make()
-                ->relationship('user',condition: function(?array $state, $livewire) : bool {
-                    // dd($state, $livewire->data);
-                    return filled($state['name']);
-                })
-                ->mutateRelationshipDataBeforeCreateUsing(function ($data, $livewire) : void {
-                    dd($data, $livewire->data);
-                    $data['user'] = $livewire->data['user'];
-                })
+            self::getFieldSet()
                 ->columnSpan('full')
                 ->schema([
                     TextInput::make('name')
@@ -87,6 +87,7 @@ class CompanyUserForm
     
     public static function configure(Schema $schema): Schema
     {
+        self::$isEditing = $schema->getOperation() === 'edit';
         return $schema
             ->components(self::getFormFields());
     }

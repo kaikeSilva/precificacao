@@ -21,13 +21,6 @@ class CompanyService
     public function createCompany(array $data): Company
     {
         return DB::transaction(function () use ($data) {
-            // cria usuario para o dono da empresa
-            $ownerUser = User::create([
-                'name' => $data['user']['name'],
-                'email' => $data['user']['email'],
-                'password' => $data['user']['password'],
-            ]);
-
             // Cria a empresa
             $company = Company::create([
                 'name' => $data['name'],
@@ -41,12 +34,14 @@ class CompanyService
                 // Os demais campos usarão os valores padrão definidos no modelo
             ]);
 
-            // Vincula o usuário proprietário à empresa
-            CompanyUser::create([
-                'company_id' => $company->id,
-                'user_id' => $ownerUser->id,
-                'role' => CompanyUser::ROLE_OWNER,
-            ]);
+            if (!isset($data['owners'])) {
+                return $company;
+            }
+
+            foreach ($data['owners'] as $owner) {
+                app(CompanyUserService::class)->createFromForm($company, $owner);
+            }
+
             return $company;
         });
     }

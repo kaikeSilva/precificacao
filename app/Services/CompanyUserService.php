@@ -22,7 +22,7 @@ class CompanyUserService
     public function createFromForm(Company $company, array $data): User
     {
         $validated = Validator::make($data, [
-            'role' => ['required', 'in:' . implode(',', CompanyUser::ROLES)],
+            'role' => ['sometimes', 'in:' . implode(',', CompanyUser::ROLES)],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -35,8 +35,10 @@ class CompanyUserService
                 'password' => Hash::make($validated['password']),
             ]);
 
-            $company->companyUsers()->attach($user->getKey(), [
-                'role' => $validated['role'],
+            $companyUser = CompanyUser::create([
+                'company_id' => $company->id,
+                'user_id' => $user->id,
+                'role' => isset($validated['role']) ? $validated['role'] : CompanyUser::ROLE_OWNER,
             ]);
 
             return $user;

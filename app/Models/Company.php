@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $updated_at
  * @property Collection|CompanyUser[] $companyUsers
  * @property CompanySettings $settings
- * @property CompanyUser $owner
+ * @property HasMany|Collection|CompanyUser[] $owners
  * @property Collection|CompanyUser[] $selectUsers
  */
 class Company extends Model
@@ -37,12 +37,10 @@ class Company extends Model
         return $this->hasOne(CompanySettings::class);
     }
 
-    public static function selectUsers($companyId)
+    public function owners()
     {
-        return CompanyUser::query()
-            ->with('user')
-            ->select('company_user_id', 'user_id', 'user.name as user_name')
-            ->where('company_id', $companyId)
-            ->first();
+        return $this->hasMany(CompanyUser::class)
+            ->where('role', CompanyUser::ROLE_OWNER)
+            ->with('user');
     }
 }

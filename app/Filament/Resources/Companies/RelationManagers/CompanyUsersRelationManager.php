@@ -3,10 +3,13 @@
 namespace App\Filament\Resources\Companies\RelationManagers;
 
 use App\Filament\Resources\CompanyUsers\CompanyUserResource;
+use App\Filament\Resources\CompanyUsers\Schemas\CompanyUserForm;
+use App\Services\CompanyUserService;
 use Filament\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Schemas\Schema;
 
 class CompanyUsersRelationManager extends RelationManager
 {
@@ -23,12 +26,23 @@ class CompanyUsersRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with('user'))
             ->headerActions([
                 CreateAction::make()
+                ->using(function (array $data): Model {
+                    return app(CompanyUserService::class)->createFromForm($this->ownerRecord, $data);
+                })
                 ->modal()
                 ->createAnother(false)
             ]);
     }
+
+    public function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components(CompanyUserForm::configure($schema)->getComponents());
+    }
+
 
     // Mostrar SÓ na View; esconder em Edit/Create
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool

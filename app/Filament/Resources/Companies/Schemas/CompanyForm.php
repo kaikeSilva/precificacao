@@ -3,8 +3,14 @@
 namespace App\Filament\Resources\Companies\Schemas;
 
 use App\Filament\Resources\CompanyUsers\Schemas\CompanyUserForm;
+use App\Models\CompanyUser;
+use App\Services\CompanyUserService;
 use Filament\Forms\Components\Repeater;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Fieldset;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Schemas\Schema;
 
 class CompanyForm
@@ -19,21 +25,11 @@ class CompanyForm
                 TextInput::make('document')
                     ->label('CPF/CNPJ')
                     ->required(),
-                Repeater::make('companyUsers')
-                    ->relationship('companyUsers')
-                    ->saveRelationshipsBeforeChildrenUsing(function ($data, $livewire, $component) : void {
-                        dump('saveRelationshipsBeforeChildrenUsing', $data);
-                    })
-                    ->mutateRelationshipDataBeforeCreateUsing(function ($data, $livewire, $component) : void {
-                        dump('mutateRelationshipDataBeforeCreateUsing', $data);
-                        $data['user'] = $livewire->data['user'];
-                    })
+                Repeater::make('Responsáveis')
                     ->defaultItems(1)
-                    ->addable(false)
-                    ->deletable(false)
                     ->minItems(1)
-                    ->maxItems(1)
-                    ->schema(CompanyUserForm::configure($schema)->getComponents())
+                    ->statePath('owners')
+                    ->schema(CompanyUserForm::getFormFields())
                     ->hidden(fn($operation) : bool => $operation !== 'create')
                     ->columnSpan('full')
             ]);

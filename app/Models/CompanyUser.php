@@ -54,4 +54,10 @@ class CompanyUser extends Pivot
     {
         return $this->belongsTo(User::class);
     }
+
+    public static function selectUsers(?int $companyId)
+    {
+        return CompanyUser::query()
+            ->with('user');
+    }
 }
