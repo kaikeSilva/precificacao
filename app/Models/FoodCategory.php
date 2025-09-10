@@ -5,25 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use App\Models\Traits\BelongsToCompany;
+use App\Models\Company;
 
 /**
- * Supplier
+ * FoodCategory
  * 
  * @property int $id
  * @property int $company_id
  * @property string $name
- * @property string|null $contact_email
- * @property string|null $phone
- * @property string|null $notes
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
  * @property Company $company
  */
-class Supplier extends Model
+class FoodCategory extends Model
 {
     use SoftDeletes, BelongsToCompany;
 
@@ -35,9 +33,6 @@ class Supplier extends Model
     protected $fillable = [
         'company_id',
         'name',
-        'contact_email',
-        'phone',
-        'notes',
     ];
 
     /**
@@ -48,16 +43,13 @@ class Supplier extends Model
     protected $casts = [
         'company_id' => 'integer',
         'name' => 'string',
-        'contact_email' => 'string',
-        'phone' => 'string',
-        'notes' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
 
     /**
-     * Inverse relation: Supplier belongs to a Company.
+     * Inverse relation: FoodCategory belongs to a Company.
      */
     public function company(): BelongsTo
     {
@@ -65,18 +57,11 @@ class Supplier extends Model
     }
 
     /**
-     * Inverse relation: Supplier has many Ingredients.
+     * Inverse relation: FoodCategory belongs to many Ingredients.
      */
-    public function ingredients(): HasMany
+    public function ingredients(): BelongsToMany
     {
-        return $this->hasMany(Ingredient::class);
-    }
-
-    /**
-     * Cost history items linked to this supplier.
-     */
-    public function costs(): HasMany
-    {
-        return $this->hasMany(IngredientCostHistoryItem::class);
+        return $this->belongsToMany(Ingredient::class)
+            ->withPivot('loss_pct');
     }
 }
