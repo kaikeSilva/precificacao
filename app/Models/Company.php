@@ -44,4 +44,9 @@ class Company extends Model
             ->where('role', CompanyUser::ROLE_OWNER)
             ->with('user');
     }
+
+    public function laborRoles()
+    {
+        return $this->hasMany(LaborRole::class);
+    }
 }
