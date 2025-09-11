@@ -19,7 +19,7 @@ class RecipeLaborRoleForm
                     ->default(fn () => function_exists('currentCompanyId') ? currentCompanyId() : null)
                     ->dehydrated(),
                 Select::make('labor_role_id')
-                    ->label('Papel de mão de obra')
+                    ->label('Função de trabalho')
                     ->relationship('laborRole', 'name')
                     ->createOptionUsing(function (array $data): int {
                         return LaborRole::create($data)->getKey();

@@ -90,4 +90,9 @@ class Recipe extends Model
     {
         return $this->hasMany(RecipeLaborRole::class);
     }
+
+    public function priceScenarios(): HasMany
+    {
+        return $this->hasMany(PriceScenario::class);
+    }
 }
