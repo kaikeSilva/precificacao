@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\RecipePackagings\Schemas;
 
+use App\Filament\Resources\Packagings\Schemas\PackagingForm;
+use App\Filament\Resources\Units\Schemas\UnitForm;
+use App\Models\Packaging;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -16,21 +19,18 @@ class RecipePackagingForm
                 Hidden::make('company_id')
                     ->default(fn () => function_exists('currentCompanyId') ? currentCompanyId() : null)
                     ->dehydrated(),
-                Select::make('recipe_id')
-                    ->label('Receita')
-                    ->relationship('recipe', 'name')
-                    ->searchable()
-                    ->required(),
                 Select::make('packaging_id')
                     ->label('Embalagem')
                     ->relationship('packaging', 'name')
+                    ->createOptionUsing(function (array $data): int {
+                        return Packaging::create($data)->getKey();
+                    })
+                    ->options(Packaging::all()->pluck('name', 'id'))
+                    ->createOptionForm(PackagingForm::getFormFields())
                     ->searchable()
+                    ->preload()
                     ->required(),
-                Select::make('unit_id')
-                    ->label('Unidade')
-                    ->relationship('unit', 'name')
-                    ->searchable()
-                    ->required(),
+                UnitForm::getUnitDefaultSelect('unit_id'),
                 TextInput::make('qty')
                     ->label('Quantidade')
                     ->required()

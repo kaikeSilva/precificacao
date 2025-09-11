@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Traits\BelongsToCompany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 /**
  * @property int $id
  * @property int $company_id
@@ -72,5 +74,20 @@ class Recipe extends Model
     public function oldVersion(): BelongsTo
     {
         return $this->belongsTo(self::class, 'old_version_id');
+    }
+
+    public function recipeItems(): HasMany
+    {
+        return $this->hasMany(RecipeItem::class);
+    }
+
+    public function recipePackagings(): HasMany
+    {
+        return $this->hasMany(RecipePackaging::class);
+    }
+
+    public function recipeLaborRoles(): HasMany
+    {
+        return $this->hasMany(RecipeLaborRole::class);
     }
 }

@@ -20,6 +20,7 @@ class PurchaseItem extends Model
         'qty',
         'unit_price',
         'subtotal',
+        'quantity_item_unity',
     ];
 
     protected $casts = [
@@ -30,6 +31,7 @@ class PurchaseItem extends Model
         'qty' => 'decimal:2',
         'unit_price' => 'decimal:2',
         'subtotal' => 'decimal:2',
+        'quantity_item_unity' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',

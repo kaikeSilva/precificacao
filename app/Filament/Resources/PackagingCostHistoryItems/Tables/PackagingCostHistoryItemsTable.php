@@ -22,10 +22,14 @@ class PackagingCostHistoryItemsTable
                     ->searchable(),
                 TextColumn::make('date')
                     ->label('Data')
-                    ->date()
+                    ->date('d/m/Y')
                     ->sortable(),
                 TextColumn::make('pack_price')
                     ->label('Preço do pacote')
+                    ->money('BRL', true)
+                    ->sortable(),
+                TextColumn::make('current_unit_price')
+                    ->label('Preço atual')
                     ->money('BRL', true)
                     ->sortable(),
                 TextColumn::make('source')

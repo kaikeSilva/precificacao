@@ -44,8 +44,6 @@ class RecipePackagingResource extends Resource
     {
         return [
             'index' => ListRecipePackagings::route('/'),
-            'create' => CreateRecipePackaging::route('/create'),
-            'edit' => EditRecipePackaging::route('/{record}/edit'),
         ];
     }
 

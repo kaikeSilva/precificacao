@@ -13,6 +13,7 @@ use App\Models\Traits\BelongsToCompany;
  * @property int $company_id
  * @property string $name
  * @property int $unit_id
+ * @property string|null $current_price
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
@@ -25,12 +26,14 @@ class Packaging extends Model
         'company_id',
         'name',
         'unit_id',
+        'current_price',
     ];
 
     protected $casts = [
         'company_id' => 'integer',
         'name' => 'string',
         'unit_id' => 'integer',
+        'current_price' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
@@ -46,7 +49,7 @@ class Packaging extends Model
         return $this->belongsTo(Unit::class);
     }
 
-    public function historyItems(): HasMany
+    public function packagingCostHistoryItem(): HasMany
     {
         return $this->hasMany(PackagingCostHistoryItem::class);
     }

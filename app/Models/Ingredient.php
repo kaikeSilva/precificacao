@@ -38,6 +38,7 @@ class Ingredient extends Model
         'name',
         'unit_id',
         'loss_pct_default',
+        'current_price',
         'notes',
     ];
 
@@ -51,6 +52,7 @@ class Ingredient extends Model
         'name' => 'string',
         'unit_id' => 'integer',
         'loss_pct_default' => 'decimal:2',
+        'current_price' => 'decimal:2',
         'notes' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -151,5 +153,10 @@ class Ingredient extends Model
         $inBase = $quantity * $map[$fromUnit];
         // Convert from base to target
         return $inBase / $map[$toUnit];
+    }
+
+    public function ingredientCostHistoryItems(): HasMany
+    {
+        return $this->hasMany(IngredientCostHistoryItem::class);
     }
 }

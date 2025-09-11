@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 
 class IngredientCostHistoryItemsTable
 {
+
     public static function configure(Table $table): Table
     {
         return $table
@@ -22,10 +23,14 @@ class IngredientCostHistoryItemsTable
                     ->searchable(),
                 TextColumn::make('date')
                     ->label('Data')
-                    ->date()
+                    ->date('d/m/Y')
                     ->sortable(),
                 TextColumn::make('pack_price')
                     ->label('Preço da embalagem')
+                    ->money('BRL', true)
+                    ->sortable(),
+                TextColumn::make('current_unit_price')
+                    ->label('Preço unitário')
                     ->money('BRL', true)
                     ->sortable(),
                 TextColumn::make('source')

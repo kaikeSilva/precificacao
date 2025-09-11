@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('supplier_id')->constrained('suppliers');
             $table->date('date');
             $table->decimal('pack_price', 12, 2);
+            $table->decimal('current_unit_price', 12, 2);
             $table->string('source', 120)->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();

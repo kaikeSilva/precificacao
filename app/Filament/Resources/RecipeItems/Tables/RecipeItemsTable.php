@@ -17,9 +17,6 @@ class RecipeItemsTable
     {
         return $table
             ->columns([
-                TextColumn::make('recipe.name')
-                    ->label('Receita')
-                    ->searchable(),
                 TextColumn::make('ingredient.name')
                     ->label('Insumo')
                     ->searchable(),

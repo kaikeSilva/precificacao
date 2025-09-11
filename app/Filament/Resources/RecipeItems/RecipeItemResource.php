@@ -44,8 +44,6 @@ class RecipeItemResource extends Resource
     {
         return [
             'index' => ListRecipeItems::route('/'),
-            'create' => CreateRecipeItem::route('/create'),
-            'edit' => EditRecipeItem::route('/{record}/edit'),
         ];
     }
 
@@ -55,5 +53,15 @@ class RecipeItemResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getModelLabel(): string
+    {
+        return 'Item de Receita';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Itens de Receita';
     }
 }

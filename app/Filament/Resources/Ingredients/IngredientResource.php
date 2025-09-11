@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Ingredients;
 use App\Filament\Resources\Ingredients\Pages\CreateIngredient;
 use App\Filament\Resources\Ingredients\Pages\EditIngredient;
 use App\Filament\Resources\Ingredients\Pages\ListIngredients;
+use App\Filament\Resources\Ingredients\Pages\ViewIngredient;
+use App\Filament\Resources\Ingredients\RelationManagers\IngredientCostHistoryItemsRelationManager;
 use App\Filament\Resources\Ingredients\Schemas\IngredientForm;
 use App\Filament\Resources\Ingredients\Tables\IngredientsTable;
 use App\Models\Ingredient;
@@ -35,7 +37,7 @@ class IngredientResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            IngredientCostHistoryItemsRelationManager::class,
         ];
     }
 
@@ -45,6 +47,7 @@ class IngredientResource extends Resource
             'index' => ListIngredients::route('/'),
             'create' => CreateIngredient::route('/create'),
             'edit' => EditIngredient::route('/{record}/edit'),
+            'view' => ViewIngredient::route('/{record}/view'),  
         ];
     }
 

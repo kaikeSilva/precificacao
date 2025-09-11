@@ -13,6 +13,6 @@ class CreatePurchase extends CreateRecord
 
     protected function getRedirectUrl(): string
     {
-        return $this->previousUrl ?? $this->getResource()::getUrl('index');
+        return $this->getResource()::getUrl('edit', ['record' => $this->record->getKey()]);
     }
 }

@@ -17,9 +17,6 @@ class RecipePackagingsTable
     {
         return $table
             ->columns([
-                TextColumn::make('recipe.name')
-                    ->label('Receita')
-                    ->searchable(),
                 TextColumn::make('packaging.name')
                     ->label('Embalagem')
                     ->searchable(),

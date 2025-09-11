@@ -44,8 +44,6 @@ class RecipeLaborRoleResource extends Resource
     {
         return [
             'index' => ListRecipeLaborRoles::route('/'),
-            'create' => CreateRecipeLaborRole::route('/create'),
-            'edit' => EditRecipeLaborRole::route('/{record}/edit'),
         ];
     }
 
@@ -55,5 +53,15 @@ class RecipeLaborRoleResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getModelLabel(): string
+    {
+        return 'Função de Trabalho';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Funções de Trabalho';
     }
 }

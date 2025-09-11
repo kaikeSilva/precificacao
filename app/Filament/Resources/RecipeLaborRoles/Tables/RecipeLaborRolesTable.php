@@ -17,9 +17,6 @@ class RecipeLaborRolesTable
     {
         return $table
             ->columns([
-                TextColumn::make('recipe.name')
-                    ->label('Receita')
-                    ->searchable(),
                 TextColumn::make('laborRole.name')
                     ->label('Papel de mão de obra')
                     ->searchable(),

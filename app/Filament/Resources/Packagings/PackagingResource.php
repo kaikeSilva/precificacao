@@ -5,9 +5,11 @@ namespace App\Filament\Resources\Packagings;
 use App\Filament\Resources\Packagings\Pages\CreatePackaging;
 use App\Filament\Resources\Packagings\Pages\EditPackaging;
 use App\Filament\Resources\Packagings\Pages\ListPackagings;
+use App\Filament\Resources\Packagings\Pages\ViewPackaging;
 use App\Filament\Resources\Packagings\Schemas\PackagingForm;
 use App\Filament\Resources\Packagings\Tables\PackagingsTable;
 use App\Models\Packaging;
+use App\Filament\Resources\Packagings\RelationManagers\PackagingCostHistoryItemRelationManager;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -35,7 +37,7 @@ class PackagingResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PackagingCostHistoryItemRelationManager::class,
         ];
     }
 
@@ -45,6 +47,7 @@ class PackagingResource extends Resource
             'index' => ListPackagings::route('/'),
             'create' => CreatePackaging::route('/create'),
             'edit' => EditPackaging::route('/{record}/edit'),
+            'view' => ViewPackaging::route('/{record}/view'),
         ];
     }
 

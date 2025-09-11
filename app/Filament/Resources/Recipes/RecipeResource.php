@@ -7,6 +7,9 @@ use App\Filament\Resources\Recipes\Pages\EditRecipe;
 use App\Filament\Resources\Recipes\Pages\ListRecipes;
 use App\Filament\Resources\Recipes\Schemas\RecipeForm;
 use App\Filament\Resources\Recipes\Tables\RecipesTable;
+use App\Filament\Resources\Recipes\RelationManagers\RecipeItemsRelationManager;
+use App\Filament\Resources\Recipes\RelationManagers\RecipeLaborRolesRelationManager;
+use App\Filament\Resources\Recipes\RelationManagers\RecipePackagingsRelationManager;
 use App\Models\Recipe;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -35,7 +38,9 @@ class RecipeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RecipeItemsRelationManager::class,
+            RecipePackagingsRelationManager::class,
+            RecipeLaborRolesRelationManager::class,
         ];
     }
 

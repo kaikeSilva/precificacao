@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\RecipeItems\Schemas;
 
+use App\Filament\Resources\Ingredients\Schemas\IngredientForm;
+use App\Filament\Resources\Units\Schemas\UnitForm;
+use App\Models\Ingredient;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -16,21 +19,18 @@ class RecipeItemForm
                 Hidden::make('company_id')
                     ->default(fn () => function_exists('currentCompanyId') ? currentCompanyId() : null)
                     ->dehydrated(),
-                Select::make('recipe_id')
-                    ->label('Receita')
-                    ->relationship('recipe', 'name')
-                    ->searchable()
-                    ->required(),
                 Select::make('ingredient_id')
                     ->label('Insumo')
                     ->relationship('ingredient', 'name')
+                    ->createOptionUsing(function (array $data): int {
+                        return Ingredient::create($data)->getKey();
+                    })
+                    ->options(Ingredient::all()->pluck('name', 'id'))
+                    ->createOptionForm(IngredientForm::getFormFields())
                     ->searchable()
+                    ->preload()
                     ->required(),
-                Select::make('unit_id')
-                    ->label('Unidade')
-                    ->relationship('unit', 'name')
-                    ->searchable()
-                    ->required(),
+                UnitForm::getUnitDefaultSelect('unit_id'),
                 TextInput::make('qty')
                     ->label('Quantidade')
                     ->required()

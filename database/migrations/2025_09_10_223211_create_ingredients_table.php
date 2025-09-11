@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->nullOnDelete();
             $table->foreignId('unit_id')->nullable()->constrained('units')->nullOnDelete();
+            $table->decimal('current_price', 10, 2)->nullable()->default(0.00);
             $table->string('name', 140);
             $table->decimal('loss_pct_default', 5, 2)->default(0.00);
             $table->text('notes')->nullable();

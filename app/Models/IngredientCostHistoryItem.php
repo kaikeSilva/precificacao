@@ -16,6 +16,7 @@ use App\Models\Traits\BelongsToCompany;
  * @property int $supplier_id
  * @property string $date
  * @property string $pack_price
+ * @property string $current_unit_price
  * @property string|null $source
  * @property string|null $notes
  * @property Carbon $created_at
@@ -38,6 +39,7 @@ class IngredientCostHistoryItem extends Model
         'supplier_id',
         'date',
         'pack_price',
+        'current_unit_price',
         'source',
         'notes',
     ];
@@ -48,6 +50,7 @@ class IngredientCostHistoryItem extends Model
         'supplier_id' => 'integer',
         'date' => 'date',
         'pack_price' => 'decimal:2',
+        'current_unit_price' => 'decimal:2',
         'source' => 'string',
         'notes' => 'string',
         'created_at' => 'datetime',

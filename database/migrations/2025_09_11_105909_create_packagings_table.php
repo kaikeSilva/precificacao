@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('unit_id')->constrained('units');
             $table->string('name', 120);
+            $table->decimal('current_price', 10, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

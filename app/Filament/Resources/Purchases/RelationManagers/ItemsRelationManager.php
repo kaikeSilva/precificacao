@@ -4,6 +4,11 @@ namespace App\Filament\Resources\Purchases\RelationManagers;
 
 use App\Filament\Resources\PurchaseItems\Schemas\PurchaseItemForm;
 use App\Filament\Resources\PurchaseItems\Tables\PurchaseItemsTable;
+use App\Models\Ingredient;
+use App\Models\Packaging;
+use App\Models\PurchaseItem;
+use App\Services\IngredientCostHistoryItemService;
+use App\Services\PackagingCostHistoryItemService;
 use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -53,7 +58,15 @@ class ItemsRelationManager extends RelationManager
                 TrashedFilter::make(),
             ])
             ->headerActions([
-                CreateAction::make(),
+                CreateAction::make()
+                ->after(function (CreateAction $action, PurchaseItem $record) {
+                    if ($record->item_type === Ingredient::class) {
+                        IngredientCostHistoryItemService::createFromPurchaseItem($record);
+                    }
+                    if ($record->item_type === Packaging::class) {
+                        PackagingCostHistoryItemService::createFromPurchaseItem($record);
+                    }
+                }),
                 // AssociateAction::make(),
             ])
             ->recordActions([
