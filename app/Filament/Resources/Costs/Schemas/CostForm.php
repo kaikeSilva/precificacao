@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Costs\Schemas;
 
+use App\Filament\Resources\CostCategories\Schemas\CostCategoryForm;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use App\Models\Cost;
 
 class CostForm
 {
@@ -19,17 +21,18 @@ class CostForm
                     ->dehydrated(),
                 Select::make('type')
                     ->label('Tipo')
-                    ->options([
-                        'fixed' => 'Fixo',
-                        'variable' => 'Variável',
-                    ])
+                    ->options(Cost::TYPES_FORMATTED)
                     ->required(),
                 TextInput::make('name')
                     ->label('Nome')
                     ->required(),
-                TextInput::make('category')
+                Select::make('category_id')
                     ->label('Categoria')
-                    ->nullable(),
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->optionsLimit(20)
+                    ->preload()
+                    ->createOptionForm(CostCategoryForm::configure(Schema::make())->getComponents()),
                 TextInput::make('value')
                     ->label('Valor')
                     ->numeric()

@@ -16,7 +16,7 @@ use App\Models\Company;
  * @property int $company_id
  * @property string $type
  * @property string $name
- * @property string|null $category
+ * @property int $category_id
  * @property string $value
  * @property string $date
  * @property Carbon $created_at
@@ -27,11 +27,19 @@ class Cost extends Model
 {
     use SoftDeletes, BelongsToCompany;
 
+    public const TYPE_FIXED = 'fixed';
+    public const TYPE_VARIABLE = 'variable';
+
+    public const TYPES_FORMATTED = [
+        self::TYPE_FIXED => 'Fixo',
+        self::TYPE_VARIABLE => 'Variável',
+    ];
+
     protected $fillable = [
         'company_id',
         'type',
         'name',
-        'category',
+        'category_id',
         'value',
         'date',
     ];
@@ -40,7 +48,7 @@ class Cost extends Model
         'company_id' => 'integer',
         'type' => 'string',
         'name' => 'string',
-        'category' => 'string',
+        'category_id' => 'integer',
         'value' => 'decimal:2',
         'date' => 'date',
         'created_at' => 'datetime',
@@ -51,5 +59,10 @@ class Cost extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(CostCategory::class);
     }
 }

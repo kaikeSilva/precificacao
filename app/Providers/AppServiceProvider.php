@@ -13,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
-        $this->app->scoped(CurrentCompany::class, fn () => new CurrentCompany());
+        $this->app->singleton(CurrentCompany::class, function () {
+            return new CurrentCompany();
+        });
     }
 
     /**

@@ -10,6 +10,11 @@ class CurrentCompany
         protected ?Company $company = null,
     ) {}
 
+    public function resetCurrentCompany(): void
+    {
+        $this->company = auth()->user()->companyUser->company;
+    }
+
     public function set(?Company $company): void
     {
         $this->company = $company;

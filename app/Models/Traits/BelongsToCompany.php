@@ -9,6 +9,7 @@ trait BelongsToCompany
     protected static function bootBelongsToCompany(): void
     {
         static::creating(function ($model) {
+            // dd("dentro do create ", $model, currentCompanyId());
             if (empty($model->company_id) && function_exists('currentCompanyId') && currentCompanyId()) {
                 $model->company_id = currentCompanyId();
             }

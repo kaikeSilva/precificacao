@@ -24,7 +24,7 @@ class CostsTable
                 TextColumn::make('name')
                     ->label('Nome')
                     ->searchable(),
-                TextColumn::make('category')
+                TextColumn::make('category.name')
                     ->label('Categoria')
                     ->searchable(),
                 TextColumn::make('value')
