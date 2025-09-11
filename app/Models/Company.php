@@ -49,4 +49,14 @@ class Company extends Model
     {
         return $this->hasMany(LaborRole::class);
     }
+
+    public function packagings()
+    {
+        return $this->hasMany(Packaging::class);
+    }
+
+    public function packagingCostHistoryItems()
+    {
+        return $this->hasMany(PackagingCostHistoryItem::class);
+    }
 }

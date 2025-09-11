@@ -100,6 +100,11 @@ class Ingredient extends Model
         return $this->hasMany(IngredientCostHistoryItem::class);
     }
 
+    public function recipeItems(): HasMany
+    {
+        return $this->hasMany(RecipeItem::class);
+    }
+
     /**
      * Business rule: cached unit cost = pack_price / convert(pack_qty, pack_unit -> unit)
      */
