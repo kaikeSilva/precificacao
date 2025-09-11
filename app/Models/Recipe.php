@@ -6,7 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Traits\BelongsToCompany;
-
+/**
+ * @property int $id
+ * @property int $company_id
+ * @property int $unit_id
+ * @property int $old_version_id
+ * @property string $name
+ * @property float $production_qty
+ * @property int $preparation_min
+ * @property int $resting_min
+ * @property bool $active_time_only
+ * @property float $loss_pct
+ * @property int $version
+ * @property string $notes
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon $deleted_at
+ */
 class Recipe extends Model
 {
     use SoftDeletes, BelongsToCompany;
@@ -16,11 +32,9 @@ class Recipe extends Model
         'unit_id',
         'old_version_id',
         'name',
-        'category',
         'production_qty',
         'preparation_min',
         'resting_min',
-        'finishing_min',
         'active_time_only',
         'loss_pct',
         'version',

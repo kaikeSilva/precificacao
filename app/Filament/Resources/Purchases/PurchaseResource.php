@@ -7,6 +7,7 @@ use App\Filament\Resources\Purchases\Pages\EditPurchase;
 use App\Filament\Resources\Purchases\Pages\ListPurchases;
 use App\Filament\Resources\Purchases\Schemas\PurchaseForm;
 use App\Filament\Resources\Purchases\Tables\PurchasesTable;
+use App\Filament\Resources\Purchases\RelationManagers\ItemsRelationManager;
 use App\Models\Purchase;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -35,7 +36,7 @@ class PurchaseResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ItemsRelationManager::class,
         ];
     }
 

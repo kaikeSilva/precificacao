@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources\Recipes\Schemas;
 
+use App\Filament\Resources\Units\Schemas\UnitForm;
+use App\Models\Unit;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -18,24 +19,18 @@ class RecipeForm
                 Hidden::make('company_id')
                     ->default(fn () => function_exists('currentCompanyId') ? currentCompanyId() : null)
                     ->dehydrated(),
-                Select::make('unit_id')
-                    ->label('Unidade')
-                    ->relationship('unit', 'name')
-                    ->searchable()
-                    ->required(),
-                Select::make('old_version_id')
-                    ->label('Versão anterior')
-                    ->relationship('oldVersion', 'name')
-                    ->searchable()
-                    ->nullable(),
                 TextInput::make('name')
                     ->label('Nome')
                     ->required(),
-                TextInput::make('category')
-                    ->label('Categoria')
-                    ->nullable(),
+                UnitForm::getUnitDefaultSelect('unit_id'),
                 TextInput::make('production_qty')
-                    ->label('Qtd produzida')
+                    ->label(function ($get) {
+                        if (!$get('unit_id')) {
+                            return 'Rendimento da receita';
+                        }
+                        $unit = Unit::find($get('unit_id'));
+                        return 'Rendimento da receita (' . $unit->name . ')';
+                    })
                     ->required()
                     ->numeric()
                     ->step('0.001'),
@@ -49,11 +44,6 @@ class RecipeForm
                     ->required()
                     ->numeric()
                     ->default(0),
-                TextInput::make('finishing_min')
-                    ->label('Acabamento (min)')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
                 Toggle::make('active_time_only')
                     ->label('Contar apenas tempo ativo')
                     ->required(),
@@ -63,11 +53,6 @@ class RecipeForm
                     ->numeric()
                     ->step('0.01')
                     ->default(0),
-                TextInput::make('version')
-                    ->label('Versão')
-                    ->required()
-                    ->numeric()
-                    ->default(1),
                 Textarea::make('notes')
                     ->label('Observações')
                     ->nullable()

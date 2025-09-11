@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Purchases\Schemas;
 
+use App\Filament\Resources\Suppliers\Schemas\SupplierForm;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -21,6 +22,9 @@ class PurchaseForm
                     ->label('Fornecedor')
                     ->relationship('supplier', 'name')
                     ->searchable()
+                    ->preload()
+                    ->optionsLimit(20)
+                    ->createOptionForm(SupplierForm::configure($schema)->getComponents())
                     ->required(),
                 TextInput::make('invoice_number')
                     ->label('Número da nota')

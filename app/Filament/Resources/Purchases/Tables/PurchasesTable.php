@@ -25,7 +25,7 @@ class PurchasesTable
                     ->searchable(),
                 TextColumn::make('invoice_date')
                     ->label('Data da nota')
-                    ->date()
+                    ->date('d/m/Y')
                     ->sortable(),
                 TextColumn::make('total_value')
                     ->label('Valor total')

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use App\Models\Traits\BelongsToCompany;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 /**
  * Supplier
@@ -78,5 +80,18 @@ class Supplier extends Model
     public function costs(): HasMany
     {
         return $this->hasMany(IngredientCostHistoryItem::class);
+    }
+
+    /**
+     * Scope para buscar fornecedores com nomes semelhantes.
+     * Normaliza o texto removendo acentos e usando lower-case.
+     */
+    public function scopeSimilarName(Builder $query, string $value): Builder
+    {
+        $normalized = Str::of($value)->lower()->ascii()->value();
+
+        return $query->where(function ($q) use ($normalized) {
+                $q->whereRaw('LOWER(name) = ?', [$normalized]);
+            });
     }
 }

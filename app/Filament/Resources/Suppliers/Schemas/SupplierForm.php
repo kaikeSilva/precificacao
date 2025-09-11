@@ -6,6 +6,8 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use App\Models\Supplier;
+use Closure;
 
 class SupplierForm
 {
@@ -20,6 +22,14 @@ class SupplierForm
                     ->dehydrated(),
                 TextInput::make('name')
                     ->label('Nome')
+                    ->rules([
+                        fn (): Closure => function (string $attribute, $value, Closure $fail) {
+                            $supplier = Supplier::similarName($value)->first();
+                            if ($supplier) {
+                                $fail('Já existe um fornecedor com o nome: ' . $supplier->name);
+                            }
+                        },
+                    ])
                     ->required(),
                 TextInput::make('contact_email')
                     ->label('E-mail')

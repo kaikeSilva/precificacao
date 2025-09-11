@@ -21,14 +21,8 @@ class RecipesTable
                 TextColumn::make('unit.name')
                     ->label('Unidade')
                     ->searchable(),
-                TextColumn::make('oldVersion.name')
-                    ->label('Versão anterior')
-                    ->searchable(),
                 TextColumn::make('name')
                     ->label('Nome')
-                    ->searchable(),
-                TextColumn::make('category')
-                    ->label('Categoria')
                     ->searchable(),
                 TextColumn::make('production_qty')
                     ->label('Qtd produzida')
@@ -42,19 +36,11 @@ class RecipesTable
                     ->label('Descanso (min)')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('finishing_min')
-                    ->label('Acabamento (min)')
-                    ->numeric()
-                    ->sortable(),
                 IconColumn::make('active_time_only')
                     ->label('Somente tempo ativo')
                     ->boolean(),
                 TextColumn::make('loss_pct')
                     ->label('Perda (%)')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('version')
-                    ->label('Versão')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
