@@ -34,16 +34,25 @@ class LaborRole extends Model
     protected static function booted(): void
     {
         static::saving(function (self $model) {
-            $hours = (int) ($model->hours_per_month ?: 0);
-            $salary = (float) ($model->monthly_salary ?: 0);
-            if ($hours > 0) {
-                $model->hour_cost_cached = round($salary / $hours, 4);
-            }
+            $hours = (int) $model->hours_per_month;
+            $salary = (float) $model->monthly_salary;
+            $model->hour_cost_cached = self::calculateHourCostCached($salary, $hours);
         });
     }
 
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public static function calculateHourCostCached($salary, $hours)
+    {
+        $salary = (float) ($salary ?: 0);
+        $hours = (int) ($hours ?: 0);
+        if ($hours == 0) {
+            return 0;
+        }
+        
+        return round($salary / $hours, 4);
     }
 }

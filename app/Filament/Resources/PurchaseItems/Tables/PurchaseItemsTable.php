@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Ingredients\Tables;
+namespace App\Filament\Resources\PurchaseItems\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -10,22 +10,42 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use App\Models\Ingredient;
+use App\Models\Packaging;
 
-class IngredientsTable
+class PurchaseItemsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->label('Nome')
+                TextColumn::make('purchase.invoice_number')
+                    ->label('Compra (NF)')
                     ->searchable(),
-                TextColumn::make('unit.name')
-                    ->label('Unidade')
+                TextColumn::make('item_type')
+                    ->label('Tipo de item')
+                    ->formatStateUsing(function (string $state): string {
+                        return match ($state) {
+                            Ingredient::class => 'Ingrediente',
+                            Packaging::class => 'Embalagem',
+                            default => $state,
+                        };
+                    })
+                    ->sortable(),
+                TextColumn::make('item.name')
+                    ->label('Item')
                     ->searchable(),
-                TextColumn::make('loss_pct_default')
-                    ->label('Perda padrão (%)')
+                TextColumn::make('qty')
+                    ->label('Quantidade')
                     ->numeric()
+                    ->sortable(),
+                TextColumn::make('unit_price')
+                    ->label('Preço unitário')
+                    ->money('BRL', true)
+                    ->sortable(),
+                TextColumn::make('subtotal')
+                    ->label('Subtotal')
+                    ->money('BRL', true)
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Criado em')
@@ -58,4 +78,3 @@ class IngredientsTable
             ]);
     }
 }
-

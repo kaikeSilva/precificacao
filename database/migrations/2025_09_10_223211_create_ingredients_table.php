@@ -15,11 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->nullOnDelete();
+            $table->foreignId('unit_id')->nullable()->constrained('units')->nullOnDelete();
             $table->string('name', 140);
-            $table->enum('unit', ['g', 'kg', 'ml', 'l', 'un']);
-            $table->decimal('pack_qty', 12, 3);
-            $table->enum('pack_unit', ['g', 'kg', 'ml', 'l', 'un']);
-            $table->decimal('pack_price', 12, 2);
             $table->decimal('loss_pct_default', 5, 2)->default(0.00);
             $table->text('notes')->nullable();
 

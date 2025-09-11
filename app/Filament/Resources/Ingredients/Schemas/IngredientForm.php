@@ -2,11 +2,15 @@
 
 namespace App\Filament\Resources\Ingredients\Schemas;
 
+use App\Filament\Resources\Suppliers\Schemas\SupplierForm;
+use App\Filament\Resources\Units\Schemas\UnitForm;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 
 class IngredientForm
 {
@@ -17,49 +21,31 @@ class IngredientForm
                 Hidden::make('company_id')
                     ->default(fn () => function_exists('currentCompanyId') ? currentCompanyId() : null)
                     ->dehydrated(),
-                Select::make('supplier_id')
-                    ->label('Fornecedor')
-                    ->relationship('supplier', 'name')
-                    ->searchable(),
                 TextInput::make('name')
                     ->label('Nome')
                     ->required(),
-                Select::make('unit')
+                Select::make('unit_id')
                     ->label('Unidade')
-                    ->options([
-                        'g' => 'g',
-                        'kg' => 'kg',
-                        'ml' => 'ml',
-                        'l' => 'l',
-                        'un' => 'un',
-                    ])
-                    ->required(),
-                TextInput::make('pack_qty')
-                    ->label('Conteúdo da embalagem')
-                    ->numeric()
-                    ->step('0.001')
-                    ->required(),
-                Select::make('pack_unit')
-                    ->label('Unidade da embalagem')
-                    ->options([
-                        'g' => 'g',
-                        'kg' => 'kg',
-                        'ml' => 'ml',
-                        'l' => 'l',
-                        'un' => 'un',
-                    ])
-                    ->required(),
-                TextInput::make('pack_price')
-                    ->label('Preço da embalagem')
-                    ->numeric()
-                    ->step('0.01')
-                    ->required(),
+                    ->relationship('unit', 'name')
+                    ->searchable()
+                    ->optionsLimit(20)
+                    ->preload()
+                    ->createOptionForm(UnitForm::configure($schema)->getComponents()),
                 TextInput::make('loss_pct_default')
                     ->label('Perda padrão (%)')
                     ->numeric()
                     ->step('0.01')
-                    ->default(0)
-                    ->required(),
+                    ->hintActions([
+                        Action::make('ajuda_loss_pct_default')
+                            ->label('Ajuda')
+                            ->icon(Heroicon::InformationCircle) // ícone de informação
+                            ->color('info')
+                            ->modalHeading('Como preencher a “Perda padrão (%)”')
+                            ->modalDescription('Perda padrão em porcentagem, este valor será usado como valor base na criação de receitas. Serve para definir indices de desperdício para o calculo do preço final.')
+                            ->modalSubmitActionLabel('Fechar')   // botão do modal
+                            ->modalIcon(Heroicon::InformationCircle),
+                    ])
+                    ->default(0),
                 Textarea::make('notes')
                     ->label('Observações')
                     ->columnSpanFull(),

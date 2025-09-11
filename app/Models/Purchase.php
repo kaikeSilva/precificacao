@@ -7,30 +7,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Traits\BelongsToCompany;
+use App\Models\Company;
+use App\Models\Supplier;
+use App\Models\PurchaseItem;
 
-/**
- * @property int $id
- * @property int $company_id
- * @property string $name
- * @property int $unit_id
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
- */
-class Packaging extends Model
+class Purchase extends Model
 {
     use SoftDeletes, BelongsToCompany;
 
     protected $fillable = [
         'company_id',
-        'name',
-        'unit_id',
+        'supplier_id',
+        'invoice_number',
+        'invoice_date',
+        'total_value',
     ];
 
     protected $casts = [
         'company_id' => 'integer',
-        'name' => 'string',
-        'unit_id' => 'integer',
+        'supplier_id' => 'integer',
+        'invoice_number' => 'string',
+        'invoice_date' => 'date',
+        'total_value' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
@@ -41,13 +39,16 @@ class Packaging extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function unit(): BelongsTo
+    public function supplier(): BelongsTo
     {
-        return $this->belongsTo(Unit::class);
+        return $this->belongsTo(Supplier::class);
     }
 
-    public function historyItems(): HasMany
+    /**
+     * Items desta compra.
+     */
+    public function items(): HasMany
     {
-        return $this->hasMany(PackagingCostHistoryItem::class);
+        return $this->hasMany(PurchaseItem::class);
     }
 }

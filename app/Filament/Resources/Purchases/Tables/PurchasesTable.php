@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Ingredients\Tables;
+namespace App\Filament\Resources\Purchases\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -11,21 +11,25 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
-class IngredientsTable
+class PurchasesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->label('Nome')
+                TextColumn::make('supplier.name')
+                    ->label('Fornecedor')
                     ->searchable(),
-                TextColumn::make('unit.name')
-                    ->label('Unidade')
+                TextColumn::make('invoice_number')
+                    ->label('Número da nota')
                     ->searchable(),
-                TextColumn::make('loss_pct_default')
-                    ->label('Perda padrão (%)')
-                    ->numeric()
+                TextColumn::make('invoice_date')
+                    ->label('Data da nota')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('total_value')
+                    ->label('Valor total')
+                    ->money('BRL', true)
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Criado em')
@@ -58,4 +62,3 @@ class IngredientsTable
             ]);
     }
 }
-

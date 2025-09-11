@@ -23,21 +23,6 @@ class PackagingsTable
                 TextColumn::make('unit.name')
                     ->label('Unidade')
                     ->searchable(),
-                TextColumn::make('pack_qty')
-                    ->label('Qtd por pacote')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('pack_price')
-                    ->label('Preço do pacote')
-                    ->money('BRL', true)
-                    ->sortable(),
-                TextColumn::make('unit_cost_cached')
-                    ->label('Custo por unidade')
-                    ->money('BRL', true)
-                    ->sortable(),
-                TextColumn::make('supplier.name')
-                    ->label('Fornecedor')
-                    ->searchable(),
                 TextColumn::make('created_at')
                     ->label('Criado em')
                     ->dateTime()

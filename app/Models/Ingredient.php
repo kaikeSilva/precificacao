@@ -15,19 +15,14 @@ use App\Models\Traits\BelongsToCompany;
  * 
  * @property int $id
  * @property int $company_id
- * @property int|null $supplier_id
  * @property string $name
- * @property string $unit
- * @property string $pack_unit
- * @property float $pack_qty
- * @property string $pack_price
+ * @property int $unit_id
  * @property string $loss_pct_default
  * @property string|null $notes
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
  * @property-read float|null $unit_cost_cached
- * @property Supplier|null $supplier
  */
 class Ingredient extends Model
 {
@@ -40,12 +35,8 @@ class Ingredient extends Model
      */
     protected $fillable = [
         'company_id',
-        'supplier_id',
         'name',
-        'unit',
-        'pack_qty',
-        'pack_unit',
-        'pack_price',
+        'unit_id',
         'loss_pct_default',
         'notes',
     ];
@@ -57,12 +48,8 @@ class Ingredient extends Model
      */
     protected $casts = [
         'company_id' => 'integer',
-        'supplier_id' => 'integer',
         'name' => 'string',
-        'unit' => 'string',
-        'pack_qty' => 'decimal:3',
-        'pack_unit' => 'string',
-        'pack_price' => 'decimal:2',
+        'unit_id' => 'integer',
         'loss_pct_default' => 'decimal:2',
         'notes' => 'string',
         'created_at' => 'datetime',
@@ -73,10 +60,7 @@ class Ingredient extends Model
     /**
      * Relations
      */
-    public function supplier(): BelongsTo
-    {
-        return $this->belongsTo(Supplier::class);
-    }
+    
 
     /**
      * Inverse relation: Ingredient belongs to a Company.
@@ -121,6 +105,11 @@ class Ingredient extends Model
         }
 
         return (float) $this->pack_price / $qtyInTargetUnit;
+    }
+
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(Unit::class);
     }
 
     /**
