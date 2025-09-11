@@ -21,6 +21,7 @@ class FoodCategoryResource extends Resource
     protected static ?string $model = FoodCategory::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    public static bool $shouldRegisterNavigation = false;
 
     public static function form(Schema $schema): Schema
     {

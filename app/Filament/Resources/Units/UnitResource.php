@@ -19,6 +19,7 @@ class UnitResource extends Resource
     protected static ?string $model = Unit::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    public static bool $shouldRegisterNavigation = false;
 
     public static function form(Schema $schema): Schema
     {

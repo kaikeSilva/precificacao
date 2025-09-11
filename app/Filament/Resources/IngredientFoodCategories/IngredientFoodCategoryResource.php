@@ -21,6 +21,7 @@ class IngredientFoodCategoryResource extends Resource
     protected static ?string $model = IngredientFoodCategory::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    public static bool $shouldRegisterNavigation = false;
 
     public static function form(Schema $schema): Schema
     {
