@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Traits\BelongsToCompany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $id
@@ -52,5 +53,16 @@ class Packaging extends Model
     public function packagingCostHistoryItem(): HasMany
     {
         return $this->hasMany(PackagingCostHistoryItem::class);
+    }
+
+    public function packagingCostHistoryItemsLatest(): HasOne
+    {
+        return $this->hasOne(PackagingCostHistoryItem::class)
+            ->ofMany(
+                ['date' => 'max', 'id' => 'max'],
+                function ($query) {
+                    $query->where('date', '>=', now()->subMonth());
+                }
+            );
     }
 }

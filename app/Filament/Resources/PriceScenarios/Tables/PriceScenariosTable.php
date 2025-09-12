@@ -17,8 +17,6 @@ class PriceScenariosTable
     {
         return $table
             ->columns([
-                TextColumn::make('recipe.name')
-                    ->searchable(),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('margin_pct')

@@ -20,4 +20,26 @@ class EditPriceScenario extends EditRecord
             RestoreAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->previousUrl ?? $this->getResource()::getUrl('index');
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['overrides_json'] = [
+            'bases' => $data['bases'] ?? [
+                'ingredients' => [],
+                'packagings'  => [],
+                'labor'       => [],
+            ],
+        ];
+
+        if (empty($data['recipe_id'])) {
+            $data['recipe_id'] = request()->has('recipe') ? (int) request()->query('recipe') : null;
+        }
+
+        return $data;
+    }
 }

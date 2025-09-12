@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use App\Models\Traits\BelongsToCompany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Ingredient
@@ -91,72 +92,24 @@ class Ingredient extends Model
         return $this->hasMany(RecipeItem::class);
     }
 
-    /**
-     * Business rule: cached unit cost = pack_price / convert(pack_qty, pack_unit -> unit)
-     */
-    public function getUnitCostCachedAttribute(): ?float
-    {
-        $qtyInTargetUnit = self::convertQuantity(
-            quantity: (float) $this->pack_qty,
-            fromUnit: (string) $this->pack_unit,
-            toUnit: (string) $this->unit,
-        );
-
-        if ($qtyInTargetUnit === null || $qtyInTargetUnit <= 0) {
-            return null;
-        }
-
-        return (float) $this->pack_price / $qtyInTargetUnit;
-    }
-
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class);
     }
 
-    /**
-     * Convert quantity between supported units keeping dimensions consistent.
-     * Supports mass: g <-> kg, volume: ml <-> l, count: un.
-     * Returns null for incompatible dimensions.
-     */
-    protected static function convertQuantity(float $quantity, string $fromUnit, string $toUnit): ?float
-    {
-        $fromUnit = strtolower($fromUnit);
-        $toUnit = strtolower($toUnit);
-
-        if ($fromUnit === $toUnit) {
-            return $quantity;
-        }
-
-        $mass = ['g' => 1.0, 'kg' => 1000.0];
-        $volume = ['ml' => 1.0, 'l' => 1000.0];
-        $count = ['un' => 1.0];
-
-        $groups = [
-            'mass' => $mass,
-            'volume' => $volume,
-            'count' => $count,
-        ];
-
-        $fromGroup = null; $toGroup = null;
-        foreach ($groups as $name => $map) {
-            if (array_key_exists($fromUnit, $map)) $fromGroup = $name;
-            if (array_key_exists($toUnit, $map)) $toGroup = $name;
-        }
-
-        if ($fromGroup === null || $toGroup === null || $fromGroup !== $toGroup) {
-            return null; // incompatible dimensions
-        }
-
-        $map = $groups[$fromGroup];
-        // Convert from source to base
-        $inBase = $quantity * $map[$fromUnit];
-        // Convert from base to target
-        return $inBase / $map[$toUnit];
-    }
-
     public function ingredientCostHistoryItems(): HasMany
     {
         return $this->hasMany(IngredientCostHistoryItem::class);
+    }
+
+    public function ingredientCostHistoryItemsLatest(): HasOne
+    {
+        return $this->hasOne(IngredientCostHistoryItem::class)
+            ->ofMany(
+                ['date' => 'max', 'id' => 'max'],
+                function ($query) {
+                    $query->where('date', '>=', now()->subMonth());
+                }
+            );
     }
 }
