@@ -5,6 +5,7 @@ namespace App\Filament\Resources\PriceScenarios;
 use App\Filament\Resources\PriceScenarios\Pages\CreatePriceScenario;
 use App\Filament\Resources\PriceScenarios\Pages\EditPriceScenario;
 use App\Filament\Resources\PriceScenarios\Pages\ListPriceScenarios;
+use App\Filament\Resources\PriceScenarios\Pages\ViewPriceScenario;
 use App\Filament\Resources\PriceScenarios\Schemas\PriceScenarioForm;
 use App\Filament\Resources\PriceScenarios\Tables\PriceScenariosTable;
 use App\Models\PriceScenario;
@@ -46,6 +47,7 @@ class PriceScenarioResource extends Resource
             'index' => ListPriceScenarios::route('/'),
             'create' => CreatePriceScenario::route('/create'),
             'edit' => EditPriceScenario::route('/{record}/edit'),
+            'view' => ViewPriceScenario::route('/{record}/view'),
         ];
     }
 
