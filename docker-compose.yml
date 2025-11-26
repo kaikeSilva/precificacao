@@ -1,0 +1,57 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: precificacao-app
+    restart: unless-stopped
+    ports:
+      - "8089:8000"
+    volumes:
+      - .:/var/www
+      - /var/www/vendor
+      - /var/www/node_modules
+      - /var/www/public/build
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    networks:
+      - precificacao-network
+
+  # Opcional: Vite dev server para hot reload durante desenvolvimento
+  vite:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: precificacao-vite
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/var/www
+      - /var/www/node_modules
+    command: npm run dev -- --host
+    networks:
+      - precificacao-network
+    profiles:
+      - dev
+
+  # Opcional: Queue worker
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: precificacao-queue
+    restart: unless-stopped
+    volumes:
+      - .:/var/www
+      - /var/www/vendor
+    command: php artisan queue:work --tries=3
+    networks:
+      - precificacao-network
+    profiles:
+      - dev
+
+networks:
+  precificacao-network:
+    driver: bridge
